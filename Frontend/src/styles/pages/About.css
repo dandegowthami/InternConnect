@@ -1,0 +1,81 @@
+/* Wrapper background */
+.about-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(
+      rgba(40, 40, 70, 0.8),
+      rgba(20, 20, 50, 0.9)
+    ),
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f") no-repeat center center/cover;
+  color: #fff;
+  padding-bottom: 50px;
+}
+
+/* Card styling */
+.about-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Icons inside cards */
+.about-icon {
+  font-size: 40px;
+  color: #4a90e2;
+  margin-bottom: 15px;
+}
+
+/* Section title */
+.section-title {
+  color: #f8f9fa;
+  font-weight: bold;
+}
+
+/* Back to home button */
+.btn-primary {
+  background-color: #4a90e2;
+  border: none;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive fix */
+@media (max-width: 768px) {
+  .about-card {
+    padding: 20px;
+  }
+}
+/* Back to Home Button */
+.btn-home {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: #4a90e2;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  z-index: 1050;
+}
+
+.btn-home:hover {
+  background: #357abd;
+  transform: scale(1.05);
+  text-decoration: none;
+  color: #fff;
+}

@@ -1,0 +1,159 @@
+/* Background and layout */
+.recruiter-dashboard {
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #f2f2f2;
+  min-height: 100vh;
+  background: linear-gradient(120deg, rgba(6, 21, 40, 0.85), rgba(12, 25, 45, 0.85)), url('/assets/recruiter-bg.jpg') no-repeat center/cover;
+}
+
+/* Navbar */
+.recruiter-navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 18px 28px;
+  backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.recruiter-navbar .brand h3 {
+  color: #2be6c7;
+  margin: 0;
+  font-weight: 700;
+}
+
+.search-and-user {
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+
+.user-icon {
+  font-size: 34px;
+  color: #2be6c7;
+}
+
+.welcome-text {
+  display: grid;
+  grid-template-areas:
+    "name logout"
+    "role logout";
+  align-items: center;
+  column-gap: 10px;
+}
+
+.welcome-text .name { grid-area: name; font-weight: 600; font-size: 15px; color: #fff; }
+.welcome-text .small { grid-area: role; font-size: 12px; color: #c8d2da; }
+
+/* Logout */
+.btn-logout {
+  grid-area: logout;
+  background: transparent;
+  color: #ffdddd;
+  border: none;
+  padding: 4px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+/* Main grid */
+.recruiter-main {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 24px;
+  padding: 30px;
+}
+
+/* Cards */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.6);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.post-card h4, .posted-list h4, .summary-card h4 {
+  margin: 0 0 12px 0;
+  color: #9be8d7;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* Form controls */
+.post-card input, .post-card textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: #fff;
+}
+
+.post-card textarea { resize: vertical; }
+
+.btn-post {
+  background: linear-gradient(90deg,#2be6c7,#1bb7ff);
+  color: #03202a;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Posted internships list */
+.internship-list { list-style:none; padding: 0; margin: 0; }
+.internship-item {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 10px 8px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.01);
+}
+
+.internship-item .title { font-weight: 600; }
+.internship-item .meta { font-size: 12px; color: #c8d2da; }
+
+.item-actions .btn.small {
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #c8d2da;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+/* Right column */
+.summary-card .summary-grid { display:flex; gap:16px; margin: 12px 0; }
+.summary-card .stat { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 8px; width:120px; text-align:center; }
+.summary-card .num { font-size: 22px; font-weight:700; color: #fff; }
+.summary-card .label { font-size: 12px; color: #cbd6dc; }
+
+/* Applicants */
+.applicants-card .applicants-header { display:flex; align-items:center; gap:12px; }
+.icon-btn { background: rgba(255,255,255,0.02); border: none; padding:8px; border-radius:8px; cursor:pointer; }
+
+.table-applicants { width: 100%; border-collapse: collapse; margin-top: 14px; color: #fff; }
+.table-applicants th, .table-applicants td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 14px; }
+.table-applicants th { color: #9be8d7; text-align: left; }
+
+/* small helpers */
+.muted { color: #9fb1bb; font-size: 13px; }
+.small { font-size: 13px; color: #b7c8cf; }
+
+/* Responsive */
+@media (max-width: 980px) {
+  .recruiter-main { grid-template-columns: 1fr; padding: 18px; }
+  .right-col { order: 2; margin-top: 18px; }
+}

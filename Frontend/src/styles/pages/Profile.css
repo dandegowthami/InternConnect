@@ -1,0 +1,4 @@
+/* Profile view / edit shared styles */
+.view-profile, .edit-profile { color: #222; background: #fff; border-radius:10px; padding:20px; margin-top:20px; }
+.profile-photo { width:120px; height:120px; border-radius:50%; object-fit:cover; border:6px solid #00b4d8; display:block; margin:0 auto; }
+.profile-placeholder { width:120px; height:120px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#ddd; margin:0 auto; color:#777; }

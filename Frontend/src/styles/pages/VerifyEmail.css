@@ -1,0 +1,52 @@
+/* VerifyEmail.css */
+
+.login-page {
+  min-height: 100vh;
+  background-image: url('https://images.unsplash.com/photo-1596495577886-d920f1bcbad6?fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 30px 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  text-align: center;
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+.login-card h4 {
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.login-card a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.login-card a:hover {
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .login-card {
+    width: 95%;
+    padding: 20px 15px;
+  }
+}

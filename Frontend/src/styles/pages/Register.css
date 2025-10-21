@@ -1,0 +1,220 @@
+/* ================================
+   Register Page Styling
+   ================================ */
+
+/* Full-page background with overlay */
+.register-page {
+  min-height: 100vh;
+  background: 
+   linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* dark overlay */
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f")
+      no-repeat center center/cover;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+}
+
+/* Back to Home Button */
+.register-page .back-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+}
+
+.register-page .back-home .btn-home {
+  border-radius: 25px;
+  font-weight: 600;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 2px solid #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.register-page .back-home .btn-home:hover {
+  background: rgba(255,255,255,0.4);
+  transform: translateY(-2px);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ================================
+   Register Card - Transparent
+   ================================ */
+.register-card {
+  width: 100%;
+  max-width: 500px;
+  border: none !important;
+  border-radius: 15px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.15); /* semi-transparent */
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.8s ease-in-out;
+  position: relative;
+  z-index: 1;
+  padding: 25px;
+}
+
+/* Card Header */
+.register-card .card-header {
+  padding: 20px;
+  background: rgba(255,255,255,0.2);
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+.register-card .card-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.register-card .card-header small {
+  font-size: 0.9rem;
+  color: #f0f0f0;
+}
+
+/* Form Inputs */
+.register-card .form-control {
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.register-card .form-control::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+.register-card .form-control:focus {
+  border-color: #6c63ff;
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 8px rgba(108, 99, 255, 0.4);
+  color: #fff;
+}
+
+/* Buttons */
+.register-card .btn-primary {
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: rgba(108, 99, 255, 0.8);
+  color: #fff;
+  border: none;
+}
+
+.register-card .btn-primary:hover {
+  background: rgba(108, 99, 255, 1);
+  transform: translateY(-2px);
+}
+
+/* Footer Links */
+.register-card .card-footer {
+  background: transparent;
+  border-top: none;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.register-card .card-footer a {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.register-card .card-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Role Selection */
+.role-options {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.role-option {
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 14px 20px;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: rgba(255,255,255,0.1);
+  width: 120px;
+  color: #fff;
+}
+
+.role-option:hover {
+  border-color: #6c63ff;
+  background: rgba(108,99,255,0.2);
+  transform: translateY(-3px);
+}
+
+.role-option.active {
+  border-color: #6c63ff;
+  background: rgba(108,99,255,0.4);
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(108,99,255,0.3);
+}
+
+.role-option span {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+}
+.btn-signup {
+  background:  rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.btn-signup:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .register-card {
+    max-width: 95%;
+    padding: 20px;
+  }
+
+  .register-card .card-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .role-option {
+    width: 100px;
+    padding: 12px 15px;
+  }
+}

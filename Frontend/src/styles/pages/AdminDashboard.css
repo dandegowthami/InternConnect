@@ -1,0 +1,34 @@
+/* Admin Dashboard Container */
+.admin-container {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/* Heading */
+.admin-container h2 {
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Users Table */
+.admin-container .table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.admin-container .table td,
+.admin-container .table th {
+  vertical-align: middle;
+}
+
+.admin-container .table tbody tr:hover {
+  background-color: #f1f9ff;
+  transition: background-color 0.3s;
+}
+
+/* Optional: Table responsive on mobile */
+@media (max-width: 768px) {
+  .admin-container .table {
+    font-size: 0.9rem;
+  }
+}

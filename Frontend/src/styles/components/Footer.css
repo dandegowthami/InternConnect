@@ -1,0 +1,15 @@
+.footer {
+  text-align: center;
+  padding: 15px;
+  background: #f1f1f1;
+  color: #555;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer {
+    font-size: 12px;
+  }
+}

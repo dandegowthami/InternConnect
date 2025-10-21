@@ -1,0 +1,229 @@
+/* ================================
+   Login Page Transparent Card
+   ================================ */
+
+/* Background with gradient overlay + image */
+.login-page {
+  min-height: 100vh;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* dark overlay */
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80")
+    no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+  color: #fff;
+}
+
+/* Back to Home Button */
+.back-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+}
+
+.back-home .btn {
+  border-radius: 25px;
+  font-weight: 500;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.back-home .btn:hover {
+  background: rgba(255,255,255,0.4);
+  color:white;
+  transform: translateY(-2px);
+}
+
+/* Login Card - fully transparent */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: none !important;
+  border-radius: 15px;
+  overflow: hidden;
+  background: transparent !important; /* force transparency */
+  color: #fff;
+  box-shadow: none !important; /* remove shadow if any */
+  animation: fadeIn 0.8s ease-in-out;
+  position: relative;
+}
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  background: transparent; /* fully transparent */
+  color: #fff;
+  animation: fadeIn 0.8s ease-in-out;
+  position: relative;
+}
+
+/* Card Header */
+.login-header {
+  padding: 25px;
+  background: rgba(255,255,255,0.2) ; /* semi-transparent gradient */
+  border-bottom: none;
+  text-align: center;
+  border-radius: 15px 15px 0 0;
+}
+
+.login-name {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.login-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* Input Fields */
+.form-control {
+  border-radius: 8px;
+  height: 48px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+.form-control::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+.form-control:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 8px rgba(108, 99, 255, 0.4);
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* Input Icons */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #fff;
+}
+
+.ps-5 {
+  padding-left: 45px !important;
+}
+
+/* Show/Hide Password Button */
+.btn-show-hide {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-show-hide:hover {
+  text-decoration: underline;
+}
+
+/* Login Button */
+.btn-login {
+  background:  rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+/* Forgot Password */
+.text-end a {
+  font-size: 0.9rem;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.text-end a:hover {
+  color: #dcdcff;
+}
+
+/* Footer */
+.card-footer {
+  background: transparent;
+  border-top: none;
+  font-size: 0.9rem;
+}
+
+.card-footer a {
+  color: #fff;
+  font-weight: 500;
+}
+
+.card-footer a:hover {
+  text-decoration: underline;
+}
+/* create your account*/
+.create-youraccount:hover{
+  transition: 0.3s;
+}
+.create-youraccount:hover{
+  color:white;
+  transform: translateY(-2px);
+
+}
+/* Fade In Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .login-card {
+    max-width: 95%;
+  }
+
+  .login-title {
+    font-size: 1.3rem;
+  }
+
+  .btn-show-hide {
+    font-size: 0.8rem;
+  }
+}

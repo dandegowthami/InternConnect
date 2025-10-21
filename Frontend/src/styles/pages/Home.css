@@ -1,0 +1,50 @@
+.hero-section {
+  min-height: 90vh;
+  background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* dark overlay */
+    url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f")
+      no-repeat center center/cover;
+  padding: 100px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.hero-text {
+  max-width: 750px;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 15px auto;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* space between buttons */
+  margin-top: 30px;
+}
+
+.hero-buttons .btn {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  width:fit-content;
+  transition: all 0.3s ease;
+}
+
+.hero-buttons .btn:hover {
+  transform: translateY(-3px);
+}
+.highlight{
+  color:red;
+}
+.highlight-2{
+  color:grey;
+}
