@@ -1,14 +1,24 @@
 import express from "express";
 import { protect, authorize } from "../middleware/authMiddleware.js";
-import { getApplicantsForInternship } from "../controllers/applicationController.js";
+import {
+  createInternship,
+  getRecruiterInternships,
+} from "../controllers/recruiterController.js";
+import { getApplicantsForInternship } from "../controllers/applicationController.js"; // This is for a different route
 
 const router = express.Router();
 
-// Get applicants for a specific internship (only recruiters)
+// Recruiter creates an internship
+router.post("/internships", protect, authorize("recruiter"), createInternship);
+
+// Recruiter gets their own posted internships
+router.get("/internships", protect, authorize("recruiter"), getRecruiterInternships);
+
+// Recruiter gets applicants for a specific internship
 router.get(
-  "/internship/:internshipId/applicants",
-  protect,               // verifies JWT
-  authorize("recruiter"), // ensures user role is recruiter
+  "/internships/:internshipId/applicants", // Corrected path to be plural
+  protect,
+  authorize("recruiter"),
   getApplicantsForInternship
 );
 

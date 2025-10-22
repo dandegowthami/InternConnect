@@ -1,0 +1,78 @@
+.internship-detail-page {
+  min-height: 100vh;
+  background: linear-gradient(rgba(15, 15, 30, 0.95), rgba(15, 15, 30, 0.95)),
+    url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80")
+      no-repeat center/cover;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+.text-cyan {
+  color: #00b4d8;
+  font-weight: 600;
+}
+
+.internship-detail-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  color: #fff;
+  max-width: 750px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.company {
+  font-weight: 600;
+  color: #ddd;
+}
+
+.location {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.description {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skills-list li {
+  background: rgba(0, 180, 216, 0.15);
+  border: 1px solid rgba(0, 180, 216, 0.4);
+  color: #00b4d8;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+}
+
+.btn-apply-now {
+  background: #00b4d8;
+  color: #fff;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.btn-apply-now:hover {
+  background: #0097b2;
+  transform: translateY(-2px);
+}
+
+.loading,
+.error {
+  text-align: center;
+  color: #ddd;
+  margin-top: 80px;
+}

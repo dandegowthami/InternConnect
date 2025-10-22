@@ -20,6 +20,7 @@ import EditProfile from "./pages/EditProfile";
 import Applications from "./pages/Applications";
 import MyInternships from "./pages/MyInternships";
 import Notifications from "./pages/Notifications";
+import InternshipDetail from "./pages/InternshipDetail";
 function App() {
   const location = useLocation();
 
@@ -53,10 +54,7 @@ function App() {
           <Route path="/student-dashboard" element={<StudentDashboard />} />
           <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/features" element={<h2>Features Page</h2>} />
-          <Route path="/internships/:id" element={<h2>Internship Detail Page</h2>} />
-          <Route path="/about" element={<h2>About Us Page</h2>} />
-          <Route path="/contact" element={<h2>Contact Page</h2>} />
+          <Route path="/internships/:id" element={<InternshipDetail />} />
           <Route path="/view-profile" element={<ViewProfile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/applications" element={<Applications />} />

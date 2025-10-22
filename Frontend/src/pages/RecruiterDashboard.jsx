@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   FaPlusCircle,
   FaSignOutAlt,
@@ -17,13 +18,51 @@ function RecruiterDashboard() {
   const [selectedInternship, setSelectedInternship] = useState(null);
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
   const headers = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
+    // Check for token and user role on mount
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user.role !== "recruiter") {
+        alert("Access Denied: You are not authorized to view this page.");
+        navigate(user.role === "student" ? "/student-dashboard" : "/login");
+        return;
+      }
+    } else {
+      // If no user in localStorage but token exists, let API calls clarify
+      // handleApiError will catch 403s or /api/auth/me will return user data
+    }
+
     fetchRecruiterAndInternships();
   }, []);
+
+  // Centralized error handler to check for authorization issues
+  const handleApiError = (err) => { // Returns true if the error was a 403 and handled
+    console.error(err);
+    if (err.response && err.response.status === 403) {
+      alert("Access Denied: You are not authorized to view this page.");
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        navigate(user.role === "student" ? "/student-dashboard" : "/login");
+      } else {
+        navigate("/login"); // Fallback if user data is missing from localStorage
+      }
+      return true; // Error was handled
+    }
+    return false; // Error was not a 403 or not handled by this function
+  };
 
   const fetchRecruiterAndInternships = async () => {
     try {
@@ -36,7 +75,9 @@ function RecruiterDashboard() {
       const res = await axios.get("http://localhost:5000/api/recruiter/internships", { headers });
       setInternships(res.data);
     } catch (err) {
-      console.error(err);
+      if (!handleApiError(err)) {
+        alert("Failed to load dashboard data."); // Generic alert for other errors
+      }
     } finally {
       setLoading(false);
     }
@@ -47,12 +88,14 @@ function RecruiterDashboard() {
   const handlePost = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/internships", form, { headers });
+      const res = await axios.post("http://localhost:5000/api/recruiter/internships", form, { headers });
       setInternships((p) => [res.data, ...p]);
       setForm({ title: "", company: "", location: "", description: "" });
+      alert("Internship posted successfully!"); // Success message
     } catch (err) {
-      console.error(err);
-      alert("Failed to post internship");
+      if (!handleApiError(err)) {
+        alert("Failed to post internship"); // Generic alert for other errors
+      }
     }
   };
 
@@ -61,9 +104,11 @@ function RecruiterDashboard() {
       setSelectedInternship(internship);
       const res = await axios.get(`http://localhost:5000/api/recruiter/internships/${internship._id}/applicants`, { headers });
       setApplicants(res.data.applicants);
+      // No success alert needed for viewing applicants
     } catch (err) {
-      console.error(err);
-      alert("Failed to load applicants");
+      if (!handleApiError(err)) {
+        alert("Failed to load applicants"); // Generic alert for other errors
+      }
     }
   };
 
@@ -74,6 +119,7 @@ function RecruiterDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setShowLogoutModal(false); // Close modal on logout
     window.location.href = "/login";
   };
 
@@ -93,7 +139,7 @@ function RecruiterDashboard() {
             </div>
           </div>
           <FaBell className="notif" />
-          <button className="btn-logout" onClick={handleLogout}><FaSignOutAlt /> Logout</button>
+          <button className="btn-logout" onClick={() => setShowLogoutModal(true)}><FaSignOutAlt /> Logout</button>
         </div>
       </header>
 
@@ -185,6 +231,24 @@ function RecruiterDashboard() {
           )}
         </div>
       </main>
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="logout-modal">
+          <div className="logout-box shadow-lg">
+            <h5>Are you sure you want to logout?</h5>
+            <div className="d-flex justify-content-between mt-3">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowLogoutModal(false)}>
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

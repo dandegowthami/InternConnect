@@ -12,6 +12,8 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import applicationRoutes from "./routes/applicationRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import internshipRoutes from "./routes/internshipRoutes.js";
+
 // ... other routes
 
 dotenv.config();
@@ -31,13 +33,14 @@ app.use(express.json());
 
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use("/api/internships", internshipRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/recruiter', recruiterRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/profile", profileRoutes);
+
 // ... other app.use() for other routes
 
 const PORT = process.env.PORT || 5000;
