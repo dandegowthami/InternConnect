@@ -1,31 +1,30 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { primaryFrontendUrl } from "../config/env.js";
 
-let transporter = null;
+// Resend's shared test sender only delivers to the Resend account owner's address.
+// Set EMAIL_FROM to an address on a domain verified in Resend to email real users.
+const DEFAULT_FROM = "InternConnect <onboarding@resend.dev>";
 
-// Created lazily so the server can start even when email credentials are missing
-const getTransporter = () => {
-  if (transporter) return transporter;
+let resend = null;
 
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    throw new Error("EMAIL_USER and EMAIL_PASS must be set in environment variables");
+// Created lazily so the server can start even when the API key is missing
+const getResend = () => {
+  if (resend) return resend;
+
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY is missing from environment variables");
   }
 
-  transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    pool: true,
-    maxConnections: 5,
-    maxMessages: 100,
-  });
-
-  return transporter;
+  resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
 };
 
-const getFrontendUrl = primaryFrontendUrl;
+const getFrontendUrl = () => primaryFrontendUrl();
+
+const HTML_ESCAPES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+
+// User-supplied text (e.g. names) must not be able to inject HTML into emails
+const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => HTML_ESCAPES[char]);
 
 const getEmailTemplate = (content) => `
   <!DOCTYPE html>
@@ -54,15 +53,22 @@ const getEmailTemplate = (content) => `
   </html>
 `;
 
-const sendMail = async ({ to, subject, html, text }) => {
-  const info = await getTransporter().sendMail({
-    from: `"InternConnect" <${process.env.EMAIL_USER}>`,
-    to,
+// Sends one email through the Resend HTTPS API
+export const sendMail = async ({ to, subject, html, text }) => {
+  const { data, error } = await getResend().emails.send({
+    from: process.env.EMAIL_FROM || DEFAULT_FROM,
+    to: [to],
     subject,
     html: getEmailTemplate(html),
     text,
   });
-  return { success: true, messageId: info.messageId };
+
+  if (error) {
+    console.error("❌ Resend email error:", error);
+    throw new Error(error.message || "Email sending failed");
+  }
+
+  return { success: true, messageId: data?.id };
 };
 
 const assertUser = (user) => {
@@ -85,7 +91,7 @@ export const sendVerificationEmail = async (user, token) => {
       to: user.email,
       subject: "Verify your email for InternConnect",
       html: `
-        <h2>Hello ${user.name},</h2>
+        <h2>Hello ${escapeHtml(user.name)},</h2>
         <p>Thank you for registering on InternConnect! We're excited to have you join our community.</p>
         <p>Please verify your email address by clicking the button below:</p>
         <a href="${verificationLink}" class="button">Verify Email Address</a>
@@ -119,7 +125,7 @@ export const sendPasswordResetEmail = async (user, token) => {
       to: user.email,
       subject: "Reset your password for InternConnect",
       html: `
-        <h2>Hello ${user.name},</h2>
+        <h2>Hello ${escapeHtml(user.name)},</h2>
         <p>We received a request to reset your password for your InternConnect account.</p>
         <p>Click the button below to reset your password:</p>
         <a href="${resetLink}" class="button">Reset Password</a>
@@ -153,9 +159,9 @@ export const sendWelcomeEmail = async (user) => {
 
     const result = await sendMail({
       to: user.email,
-      subject: "Welcome to InternConnect!",
+      subject: "Welcome to InternConnect! 🎉",
       html: `
-        <h2>Welcome to InternConnect, ${user.name}! 🎉</h2>
+        <h2>Welcome to InternConnect, ${escapeHtml(user.name)}! 🎉</h2>
         <p>Your email has been verified successfully. You're all set to start your journey with us!</p>
         <h3>What's next?</h3>
         <ul>
@@ -179,10 +185,6 @@ export const sendWelcomeEmail = async (user) => {
 // =======================
 // GRACEFUL SHUTDOWN
 // =======================
-export const closeTransporter = () => {
-  if (transporter) {
-    transporter.close();
-    transporter = null;
-    console.log("✅ Email transporter closed");
-  }
-};
+// Resend uses a stateless HTTPS API, so there is no connection to close.
+// Kept so server.js can call it unconditionally during shutdown.
+export const closeTransporter = () => {};

@@ -13,6 +13,8 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [unverified, setUnverified] = useState(false);
+  const [resendState, setResendState] = useState({ sending: false, message: "" });
 
   const notice = searchParams.get("verified")
     ? "Your email has been verified. You can sign in now."
@@ -27,6 +29,8 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
+    setUnverified(false);
+    setResendState({ sending: false, message: "" });
     setLoading(true);
 
     try {
@@ -37,7 +41,18 @@ function Login() {
       navigate(from && from !== "/login" ? from : dashboardPathFor(data.user.role), { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Invalid email or password"));
+      setUnverified(err.response?.data?.code === "EMAIL_NOT_VERIFIED");
       setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setResendState({ sending: true, message: "" });
+    try {
+      const { data } = await API.post("/auth/resend-verification", { email: formData.email });
+      setResendState({ sending: false, message: data.message });
+    } catch (err) {
+      setResendState({ sending: false, message: getErrorMessage(err, "Could not resend the email.") });
     }
   };
 
@@ -55,6 +70,25 @@ function Login() {
       {error && (
         <div className="alert alert-danger mb-4" role="alert">
           {error}
+          {unverified && (
+            <div className="mt-2">
+              {resendState.message ? (
+                <span className="fw-semibold">{resendState.message}</span>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-light btn-sm"
+                  onClick={handleResend}
+                  disabled={resendState.sending}
+                >
+                  {resendState.sending && (
+                    <span className="spinner-border spinner-border-sm" aria-hidden="true" />
+                  )}
+                  {resendState.sending ? "Sending…" : "Resend verification email"}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
 

@@ -1,6 +1,6 @@
 // Validates required environment variables at startup so misconfiguration fails fast.
 const REQUIRED = ["MONGO_URI", "JWT_SECRET"];
-const RECOMMENDED = ["FRONTEND_URL", "EMAIL_USER", "EMAIL_PASS"];
+const RECOMMENDED = ["FRONTEND_URL", "RESEND_API_KEY"];
 
 export const isProduction = process.env.NODE_ENV === "production";
 

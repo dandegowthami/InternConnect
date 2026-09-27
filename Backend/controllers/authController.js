@@ -7,6 +7,8 @@ import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/email.js
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD_LENGTH = 6;
 const SELF_REGISTER_ROLES = ["student", "recruiter"];
+const VERIFICATION_TTL = 30 * 60 * 1000; // 30 minutes
+const RESET_TTL = 60 * 60 * 1000; // 1 hour
 
 const toPublicUser = (user) => ({
   _id: user._id,
@@ -17,13 +19,29 @@ const toPublicUser = (user) => ({
   resume: user.resume,
 });
 
+const normaliseEmail = (value) => value?.trim().toLowerCase() || "";
+
+// Case-insensitive lookup, so accounts created with mixed-case emails still match
+const findByEmail = (email) => User.findOne({ email }).collation({ locale: "en", strength: 2 });
+
+const newToken = () => crypto.randomBytes(20).toString("hex");
+
+// Gives the user a fresh verification link and emails it
+const issueVerification = async (user) => {
+  const token = newToken();
+  user.emailVerificationToken = token;
+  user.emailVerificationExpires = Date.now() + VERIFICATION_TTL;
+  await user.save();
+  await sendVerificationEmail(user, token);
+};
+
 // =======================
 // REGISTER USER + EMAIL VERIFICATION
 // =======================
 export const register = async (req, res) => {
   try {
     const name = req.body.name?.trim();
-    const email = req.body.email?.trim();
+    const email = normaliseEmail(req.body.email);
     const { password, role } = req.body;
 
     if (!name || !email || !password) {
@@ -38,28 +56,46 @@ export const register = async (req, res) => {
 
     // Admin accounts cannot be created through public registration
     const safeRole = SELF_REGISTER_ROLES.includes(role) ? role : "student";
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "An account with this email already exists" });
+    const existingUser = await findByEmail(email);
+
+    if (existingUser?.emailVerified) {
+      return res.status(400).json({ message: "An account with this email already exists. Please sign in." });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const emailToken = crypto.randomBytes(20).toString("hex");
+    // An unverified account (e.g. its link expired) can register again to get a new link
+    if (existingUser) {
+      existingUser.name = name;
+      existingUser.password = hashedPassword;
+      existingUser.role = safeRole;
 
-    const user = await User.create({
+      try {
+        await issueVerification(existingUser);
+      } catch (emailError) {
+        console.error("Failed to resend verification email:", emailError.message);
+        return res.status(500).json({ message: "Failed to send verification email. Please try again." });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "We've sent you a new verification link. Please check your inbox.",
+        user: toPublicUser(existingUser),
+      });
+    }
+
+    const user = new User({
       name,
       email,
       password: hashedPassword,
       role: safeRole,
       emailVerified: false,
-      emailVerificationToken: emailToken,
-      emailVerificationExpires: Date.now() + 30 * 60 * 1000, // 30 min
     });
 
     try {
-      await sendVerificationEmail(user, emailToken);
+      await issueVerification(user);
     } catch (emailError) {
+      // Don't keep an account the user can never verify
       await User.findByIdAndDelete(user._id);
       console.error("Failed to send verification email:", emailError.message);
       return res.status(500).json({ message: "Failed to send verification email. Please try again." });
@@ -72,7 +108,41 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Register error:", error);
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "An account with this email already exists" });
+    }
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// =======================
+// RESEND VERIFICATION EMAIL
+// =======================
+export const resendVerification = async (req, res) => {
+  try {
+    const email = normaliseEmail(req.body.email);
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await findByEmail(email);
+
+    if (user?.emailVerified) {
+      return res.status(400).json({ message: "This email is already verified. Please sign in." });
+    }
+
+    if (user) {
+      await issueVerification(user);
+    }
+
+    // Same response whether or not the account exists, to avoid revealing registered emails
+    res.json({
+      success: true,
+      message: "If an unverified account exists for this email, a new verification link has been sent.",
+    });
+  } catch (err) {
+    console.error("Resend verification error:", err);
+    res.status(500).json({ message: "Could not send verification email. Please try again." });
   }
 };
 
@@ -111,14 +181,14 @@ export const verifyEmail = async (req, res) => {
 // =======================
 export const login = async (req, res) => {
   try {
-    const email = req.body.email?.trim();
+    const email = normaliseEmail(req.body.email);
     const { password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email });
+    const user = await findByEmail(email);
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -129,7 +199,10 @@ export const login = async (req, res) => {
     }
 
     if (!user.emailVerified) {
-      return res.status(403).json({ message: "Please verify your email before signing in" });
+      return res.status(403).json({
+        message: "Please verify your email before signing in",
+        code: "EMAIL_NOT_VERIFIED",
+      });
     }
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
@@ -153,12 +226,12 @@ export const login = async (req, res) => {
 // =======================
 export const forgotPassword = async (req, res) => {
   try {
-    const email = req.body.email?.trim();
+    const email = normaliseEmail(req.body.email);
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
     }
 
-    const user = await User.findOne({ email });
+    const user = await findByEmail(email);
     if (!user) {
       return res.status(404).json({ message: "No account found with this email" });
     }
@@ -166,9 +239,9 @@ export const forgotPassword = async (req, res) => {
       return res.status(403).json({ message: "Please verify your email first" });
     }
 
-    const resetToken = crypto.randomBytes(20).toString("hex");
+    const resetToken = newToken();
     user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+    user.resetPasswordExpires = Date.now() + RESET_TTL;
     await user.save();
 
     await sendPasswordResetEmail(user, resetToken);

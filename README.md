@@ -3,7 +3,7 @@
 A full-stack internship platform: students discover and apply to internships, recruiters post openings and review applicants, and admins moderate the platform.
 
 - **Frontend:** React 19, React Router 6, Vite, Bootstrap 5 (grid/utilities) with a custom design system in `Frontend/src/styles`
-- **Backend:** Node.js, Express 5, MongoDB (Mongoose), JWT auth, Multer uploads, Nodemailer
+- **Backend:** Node.js, Express 5, MongoDB (Mongoose), JWT auth, Multer uploads, Resend (email)
 
 ## Getting started
 
@@ -22,8 +22,8 @@ Copy `Backend/.env.example` to `Backend/.env` and fill it in:
 | `MONGO_URI`      | Yes      | MongoDB connection string                                            |
 | `JWT_SECRET`     | Yes      | Secret used to sign login tokens (32+ random characters in production) |
 | `FRONTEND_URL`   | Yes      | Frontend origin(s) for CORS, comma-separated; the first is used in email links |
-| `EMAIL_USER`     | Yes      | Gmail address used to send emails                                    |
-| `EMAIL_PASS`     | Yes      | Gmail app password                                                   |
+| `RESEND_API_KEY` | Yes      | Resend API key used to send verification and reset emails             |
+| `EMAIL_FROM`     | No       | Sender address on a Resend-verified domain (default: Resend test sender, which only emails your own account) |
 | `PORT`           | No       | API port (default `5000`; hosts usually set this)                    |
 | `JWT_EXPIRES_IN` | No       | Login session length (default `1d`)                                  |
 | `NODE_ENV`       | No       | `production` hides error details and uses production logging         |
@@ -35,7 +35,7 @@ Other scripts:
 ```bash
 npm run lint                               # ESLint
 npm run format                             # Prettier (shared config in the repo root)
-npm run test-email                         # verify email configuration
+npm run test-email -- you@example.com      # send a test email through Resend
 npm run make-admin -- someone@example.com  # promote an existing account to admin
 ```
 
@@ -68,7 +68,7 @@ Set `VITE_API_URL` in `Frontend/.env` if the API is not at `http://localhost:500
 
 | Method & path | Access |
 | --- | --- |
-| `POST /api/auth/register` · `POST /api/auth/login` · `GET /api/auth/verify-email/:token` | Public |
+| `POST /api/auth/register` · `POST /api/auth/login` · `GET /api/auth/verify-email/:token` · `POST /api/auth/resend-verification` | Public |
 | `POST /api/auth/forgot-password` · `POST /api/auth/reset-password/:token` | Public |
 | `GET /api/auth/me` · `GET /api/profile/me` · `PUT /api/profile/update` (multipart: `photo`, `resume`) | Signed in |
 | `GET /api/internships/public` | Public |
