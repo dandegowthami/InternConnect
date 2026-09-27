@@ -1,0 +1,7 @@
+node_modules
+dist
+build
+Backend/uploads
+.backup-original
+package-lock.json
+*.md

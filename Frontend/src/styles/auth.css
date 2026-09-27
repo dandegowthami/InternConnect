@@ -1,0 +1,293 @@
+/* ==========================================================================
+   Auth pages: login, register, forgot / reset password, verify email
+   ========================================================================== */
+
+.auth-page {
+  display: grid;
+  grid-template-columns: minmax(360px, 5fr) 7fr;
+  min-height: 100vh;
+  background: var(--ic-surface);
+}
+
+/* ---------- Brand panel ---------- */
+
+.auth-aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem 3rem;
+  overflow: hidden;
+  color: #c7d2fe;
+  background: radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.45), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.3), transparent 45%),
+    linear-gradient(160deg, #1e1b4b 0%, #0b1120 100%);
+}
+
+.auth-aside-content {
+  max-width: 420px;
+}
+
+.auth-aside h2 {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.auth-aside p {
+  font-size: 1rem;
+  color: #c7d2fe;
+}
+
+.auth-aside ul {
+  display: grid;
+  gap: 0.9rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-aside li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #e0e7ff;
+}
+
+.auth-aside li svg {
+  flex-shrink: 0;
+  color: #67e8f9;
+}
+
+.auth-aside-footer {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #818cf8 !important;
+}
+
+/* ---------- Form panel ---------- */
+
+.auth-main {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2rem 3rem;
+  background: var(--ic-bg);
+}
+
+.auth-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.auth-mobile-logo {
+  visibility: hidden;
+}
+
+.auth-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ic-text-muted);
+}
+
+.auth-back:hover {
+  color: var(--ic-primary);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  margin: auto;
+  padding: 2.5rem;
+  background: var(--ic-surface);
+  border: 1px solid var(--ic-border);
+  border-radius: var(--ic-radius-lg);
+  box-shadow: var(--ic-shadow);
+}
+
+.auth-card-header {
+  margin-bottom: 1.75rem;
+}
+
+.auth-card-header h1 {
+  margin-bottom: 0.4rem;
+  font-size: 1.6rem;
+}
+
+.auth-card-header p {
+  margin: 0;
+  color: var(--ic-text-muted);
+}
+
+.auth-card form {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.auth-card form .form-label {
+  margin-bottom: 0.35rem;
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.auth-card-footer {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ic-border);
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--ic-text-muted);
+}
+
+.auth-card-footer a {
+  font-weight: 600;
+}
+
+/* Role picker on register */
+
+.role-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.role-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--ic-border-strong);
+  border-radius: var(--ic-radius);
+  background: var(--ic-surface);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.role-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.role-option-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--ic-text-muted);
+  background: var(--ic-surface-muted);
+}
+
+.role-option strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--ic-text);
+}
+
+.role-option small {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--ic-text-muted);
+}
+
+.role-option:hover {
+  border-color: rgba(var(--ic-primary-rgb), 0.5);
+}
+
+.role-option.selected {
+  border-color: var(--ic-primary);
+  background: var(--ic-primary-soft);
+}
+
+.role-option.selected .role-option-icon {
+  color: #fff;
+  background: var(--ic-primary);
+}
+
+.role-option:has(input:focus-visible) {
+  box-shadow: var(--ic-focus-ring);
+}
+
+/* Result card (verify email, register success) */
+
+.auth-result {
+  text-align: center;
+}
+
+.auth-result-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.auth-result-icon.success {
+  color: var(--ic-success);
+  background: var(--ic-success-soft);
+}
+
+.auth-result-icon.error {
+  color: var(--ic-danger);
+  background: var(--ic-danger-soft);
+}
+
+.auth-result-icon.info {
+  color: var(--ic-primary);
+  background: var(--ic-primary-soft);
+}
+
+.auth-result p {
+  color: var(--ic-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 991.98px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-aside {
+    display: none;
+  }
+
+  .auth-mobile-logo {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .auth-main {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .role-picker {
+    grid-template-columns: 1fr;
+  }
+}
