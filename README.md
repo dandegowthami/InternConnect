@@ -81,6 +81,7 @@ Set `VITE_API_URL` in `Frontend/.env` if the API is not at `http://localhost:500
 | `GET /api/admin/stats` · `GET /api/admin/users` · `GET /api/admin/internships` · `DELETE /api/admin/users/:id` · `DELETE /api/admin/internships/:id` | Admin |
 
 ## Deployment
+Website URL:https://internconnect-frontend-u7tf.onrender.com/
 
 The frontend and backend deploy separately: the API to a Node host (Render, Railway, a VPS…) and the frontend to a static host (Vercel, Netlify…).
 
